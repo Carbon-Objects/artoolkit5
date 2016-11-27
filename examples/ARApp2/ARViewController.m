@@ -50,6 +50,8 @@
 #import <AR/gsub_es.h>
 #import "../ARAppCore/ARMarkerSquare.h"
 #import "../ARAppCore/ARMarkerMulti.h"
+#import "../ARAppCore/VEObjectOBJ.h"
+
 
 #define VIEW_DISTANCE_MIN        5.0f          // Objects closer to the camera than this will not be displayed.
 #define VIEW_DISTANCE_MAX        2000.0f        // Objects further away from the camera than this will not be displayed.
@@ -389,7 +391,45 @@ static void startCallback(void *userData)
     self.virtualEnvironment = [[[VirtualEnvironment alloc] initWithARViewController:self] autorelease];
     [self.virtualEnvironment addObjectsFromObjectListFile:@"Data2/models.dat" connectToARMarkers:markers];
     
-    // Because in this example we're not currently assigning a world coordinate system
+    VEObject *tempObject;
+    NSString *objectFullpath = @"Data2/models.dat";  // [[NSBundle mainBundle] pathForResource:@"Data2/models" ofType:@"dat"];
+    ARdouble translation[3], rotation[4], scale[3];
+    char *config = NULL;
+    tempObject = [(VEObject *)[VEObjectOBJ alloc] initFromFile:objectFullpath translation:translation rotation:rotation scale:scale config:config];
+    if (!tempObject) {
+        NSLog(@"Error attempting to read object data file (%@).\n", objectFullpath);
+    }
+    
+    // Set optional properties.
+    tempObject.lit = FALSE;  //(lightingFlag ? TRUE : FALSE);
+    
+    // If a valid marker name has been specified, connect the VEObject to notifications from the referred-to ARMarker.
+    /*
+    if (markers) {
+        if (markerName && *markerName) {
+            marker = [ARMarker findMarkerWithName:[NSString stringWithUTF8String:markerName] inMarkers:markers];
+        } else if (markerIndex >= 0 && markerIndex < [markers count]) {
+            marker = [markers objectAtIndex:(NSUInteger)markerIndex];
+        }
+        if (marker) {
+            tempObject.visible = FALSE; // Objects tied to markers will not be initially visible.
+            [tempObject startObservingARMarker:marker];
+        }
+    }
+    
+    if (autoParentFlag && autoParent) {
+        tempObject.visible = FALSE; // Child objects will not be initially visible.
+        [autoParent addChild:tempObject];
+    }
+    [self addObject:tempObject];
+    
+    [tempObject release];
+    if (config) free(config);
+    if (markerName) free(markerName);
+    objectsAdded++;
+    */
+    
+    // Because in this example we're not currently assigning a world coordinatse system
     // (we're just using local marker coordinate systems), set the camera pose now, to
     // the default (i.e. the identity matrix).
     float pose[16] = {1.0f, 0.0f, 0.0f, 0.0f,  0.0f, 1.0f, 0.0f, 0.0f,  0.0f, 0.0f, 1.0f, 0.0f,  0.0f, 0.0f, 0.0f, 1.0f};

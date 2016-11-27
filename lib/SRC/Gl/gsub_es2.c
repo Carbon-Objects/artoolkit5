@@ -1091,6 +1091,7 @@ GLint arglGLCompileShaderFromString(GLuint *shader, GLenum type, const char *s)
     glShaderSource(*shader, 1, &s, NULL);	// set source code in the shader
     glCompileShader(*shader);					// compile shader
 	
+#define DEBUG
 #if defined(DEBUG)
 	GLint logLength;
     glGetShaderiv(*shader, GL_INFO_LOG_LENGTH, &logLength);
@@ -1098,6 +1099,7 @@ GLint arglGLCompileShaderFromString(GLuint *shader, GLenum type, const char *s)
         GLchar *log = (GLchar *)malloc(logLength);
         glGetShaderInfoLog(*shader, logLength, &logLength, log);
         ARLOGe("Shader compile log:\n%s", log);
+        ARLOGe("Shader :\n%s", s);
         free(log);
     }
 #endif

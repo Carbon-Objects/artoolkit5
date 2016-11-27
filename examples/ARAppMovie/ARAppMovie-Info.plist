@@ -31,6 +31,8 @@
 	<string>${VERSION}</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>CAMERA USAGE DESCRIPTION GOES HERE</string>
 	<key>NSHumanReadableCopyright</key>
 	<string>©2015, DAQRI LLC</string>
 	<key>NSMainNibFile</key>
